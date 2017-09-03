@@ -1,13 +1,14 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const { mongoose } = require('./db/mongoose')
-const { Todo } = require('./models/todo')
-const { User } = require('./models/user')
-const _ = require('lodash')
+const express = require('express'),
+      bodyParser = require('body-parser'),
+      { mongoose } = require('./db/mongoose'),
+      { Todo } = require('./models/todo'),
+      { User } = require('./models/user'),
+      _ = require('lodash')
 
 const app = express()
 app.use(bodyParser.json())
 
+/*           USER ROUTES                */
 app.post('/users', (req, res) => {
 
 	const body = _.pick(req.body, ['email', 'password'])
@@ -20,9 +21,9 @@ app.post('/users', (req, res) => {
 		.catch(e => {
 			res.status(400).send(e)
 		})
-
-
 })
+
+/*             TODO ROUTES                */
 
 app.post('/todos', (req, res) => {
 	const todo = new Todo({
