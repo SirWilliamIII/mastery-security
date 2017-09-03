@@ -1,9 +1,4 @@
 const mongoose = require('mongoose')
-const { ObjectID } = require('mongodb')
-
-const oid = new ObjectID()
-
-console.log(`ObjectID: ${oid}`)
 
 mongoose.Promise = global.Promise
 

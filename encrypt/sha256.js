@@ -15,6 +15,8 @@ const salt = 'secret_sauce'
 
 const hash = SHA256(JSON.stringify(data) + salt).toString()
 
+console.log(`The hash value is ${ hash }`)
+
 const token = {
 	data,
 	hash
@@ -22,6 +24,8 @@ const token = {
 
 //  Validate
 const result = SHA256(JSON.stringify(token.data) + salt).toString()
+
+console.log(`The validated hash is ${ result }`)
 
 if(result == token.hash) {
 	console.log('Data is safe, proceed')

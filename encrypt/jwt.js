@@ -25,5 +25,14 @@ const decrypted = jwt.verify(token, salt)
 
 const strDecrypt = JSON.stringify(decrypted)
 
-
 console.log(`Decrypted is ${ strDecrypt }`)
+
+if( strDecrypt == token.hash) {
+	console.log('Data is safe, proceed')
+} else {
+	console.log('Security Breach! Do not proceed')
+}
+
+console.log(`The correct token data: ${ strDecrypt }`)
+
+

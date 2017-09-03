@@ -23,6 +23,17 @@ var bytes = CryptoJS.AES.decrypt(encryptedText.toString(), salt);
 
 console.log(`Bytes: ${bytes}`)
 
-var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+var decryptedData = bytes.toString(CryptoJS.enc.Utf8);
 
 console.log(`The decrypted is ${decryptedData}`)
+
+
+if( decryptedData == encryptedText ) {
+	console.log('Data is safe, proceed')
+} else {
+	console.log('Security Breach! Do not proceed')
+}
+
+console.log(`The correct token data: ${ decryptedData }`)
+
+
