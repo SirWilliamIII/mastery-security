@@ -7,7 +7,7 @@ const data = {
 
 bcrypt.genSalt(10, (error, salt) => {
 	bcrypt.hash(data.password, salt, (err, hash) => {
-		//console.log(hash)
+		console.log(hash)
 	})
 })
 

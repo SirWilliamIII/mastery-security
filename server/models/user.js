@@ -1,10 +1,10 @@
 const mongoose  = require('mongoose'),
       validator = require('validator'),
       jwt       = require('jsonwebtoken'),
-      _         = require('lodash')
+      _         = require('lodash'),
+      bcrypt    = require('bcryptjs')
 
 const Schema = mongoose.Schema
-
 const UserSchema = new Schema({
 	email:    {
 		type:      String,
@@ -34,6 +34,8 @@ const UserSchema = new Schema({
 	}]
 })
 
+const mysalt = 'secret_sauce'
+
 UserSchema.methods.toJSON = function () {
 	let user = this
 
@@ -46,9 +48,9 @@ UserSchema.methods.generateAuthToken = function () {
 
 	const access = 'auth'
 	const userId = user._id.toHexString()
-	const salt = 'secret_sauce'
 
-	const token = jwt.sign({ _id: userId, access }, salt).toString()
+
+	const token = jwt.sign({ _id: userId, access }, mysalt).toString()
 
 	console.log(`The user token is ${token}`)
 
@@ -67,8 +69,7 @@ UserSchema.methods.generateAuthToken = function () {
 
 UserSchema.statics.findByToken = function (token) {
 	const User = this
-	const salt = 'secret_sauce'
-	let decoded = jwt.verify(token, salt)
+	let decoded = jwt.verify(token, mysalt)
 
 	return User.findOne({
 		_id:             decoded._id,
@@ -76,6 +77,33 @@ UserSchema.statics.findByToken = function (token) {
 		'tokens.access': 'auth'
 	})
 }
+
+UserSchema.pre('save', function (next) {
+	const user = this
+
+	//  Check whether the password was modified !!
+	if(user.isModified('password')) {
+		//  user.password
+		//  user.password = hash
+		//  next()
+		// bcrypt.genSalt(10, (err, salt) => {
+		// 	bcrypt.hash(user.password, salt, (err, hash) => {
+		// 		if(user.password === hash) {
+		// 			return next()
+		// 		}
+		// 		return 'Error'
+		// 	})
+		// })
+		bcrypt.genSalt(10, (err, salt) => {
+			bcrypt.hash(user.password, salt, (err, hash) => {
+				user.password = hash
+				next()
+			})
+		})
+	} else {
+		next()
+	}
+})
 
 const User = mongoose.model('User', UserSchema)
 
