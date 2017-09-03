@@ -11,11 +11,9 @@ bcrypt.genSalt(10, (error, salt) => {
 	})
 })
 
-const hashedPassword = '$2a$10$J3HDvZe66hNmkhPKrR9nGercJgeI90eop2wpNG3Gyyn3p/0R0tvNy'
-
-//  VALIDATE
-bcrypt.compare(data.password, hashedPassword, (err, res) => {
-	console.log(res)
-})
+// //  VALIDATE
+// bcrypt.compare(data.password, hashedPassword, (err, res) => {
+// 	console.log(res)
+// })
 
 
