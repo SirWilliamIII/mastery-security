@@ -47,8 +47,6 @@ UserSchema.methods.generateAuthToken = function () {
 
 	const access = 'auth'
 	const userId = user._id.toHexString()
-
-
 	const token = jwt.sign({ _id: userId, access }, mysalt).toString()
 
 	console.log(`The user token is ${token}`)
@@ -85,12 +83,12 @@ UserSchema.statics.findByCredentials = function (email, password) {
 			if(!user) {
 				return Promise.reject()
 			}
-			return new Promise((resolve, reject) => {
+			return new Promise((res, rej) => {
 				bcrypt.compare(password, user.password, (err, res) => {
 					if(res) {
-						resolve(user)
+						res(user)
 					} else {
-						reject()
+						rej()
 					}
 				})
 			})
