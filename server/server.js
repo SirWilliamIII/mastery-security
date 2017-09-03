@@ -13,7 +13,6 @@ app.use(bodyParser.json())
 /*      POST /users             */
 
 app.post('/users', (req, res) => {
-
 	const body = _.pick(req.body, ['email', 'password'])
 	const user = new User(body)
 
