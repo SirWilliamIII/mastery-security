@@ -3,7 +3,6 @@ const mongoose  = require('mongoose'),
       jwt       = require('jsonwebtoken'),
       _         = require('lodash')
 
-
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
@@ -64,6 +63,18 @@ UserSchema.methods.generateAuthToken = function () {
 		.then(() => {
 			return token
 		})
+}
+
+UserSchema.statics.findByToken = function (token) {
+	const User = this
+	const salt = 'secret_sauce'
+	let decoded = jwt.verify(token, salt)
+
+	return User.findOne({
+		_id:             decoded._id,
+		'tokens.token':  token,
+		'tokens.access': 'auth'
+	})
 }
 
 const User = mongoose.model('User', UserSchema)

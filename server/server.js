@@ -1,14 +1,16 @@
-const express = require('express'),
-      bodyParser = require('body-parser'),
+const express      = require('express'),
+      bodyParser   = require('body-parser'),
+      logger       = require('morgan'),
       { mongoose } = require('./db/mongoose'),
-      { Todo } = require('./models/todo'),
-      { User } = require('./models/user'),
-      _ = require('lodash')
+      { Todo }     = require('./models/todo'),
+      { User }     = require('./models/user'),
+      _            = require('lodash'),
+      bcrypt       = require('bcryptjs')
 
 const app = express()
+app.use(logger('dev'))
 app.use(bodyParser.json())
 
-/*                USER ROUTES                */
 
 /*      POST /users             */
 
@@ -25,6 +27,20 @@ app.post('/users', (req, res) => {
 		})
 		.catch(e => {
 			res.status(400).send(e)
+		})
+})
+
+/*      GET /users/me             */
+
+app.get('/users/me', (req, res) => {
+	const token = req.header('x-auth')
+
+	User.findByToken(token)
+		.then(user => {
+			res.send(user)
+		})
+		.catch(e => {
+			res.status(401).send(e)
 		})
 })
 
