@@ -1,15 +1,26 @@
 const express      = require('express'),
       bodyParser   = require('body-parser'),
       logger       = require('morgan'),
-      { mongoose } = require('./db/mongoose'),
-      { Todo }     = require('./models/todo'),
-      { User }     = require('./models/user'),
+      { mongoose } = require('./server/db/mongoose'),
+      { Todo }     = require('./server/models/todo'),
+      { User }     = require('./server/models/user'),
       _            = require('lodash'),
       bcrypt       = require('bcryptjs')
 
 const app = express()
+const port = 3000
 app.use(logger('dev'))
 app.use(bodyParser.json())
+
+/*      HEROKU GET              */
+
+app.get('/times', function(request, response) {
+	var result = ''
+    var times = process.env.TIMES || 5
+    for (i=0; i < times; i++)
+    	result += i + ' ';
+        response.send(result);
+});
 
 
 /*      POST /users             */
@@ -74,6 +85,6 @@ app.post('/users/login', (req, res) => {
 })
 
 
-app.listen(3000, () => {
-	console.log('Started on port 3000')
+app.listen(port, () => {
+	console.log(`Listening on port ${port}`)
 })
